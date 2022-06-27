@@ -8,7 +8,7 @@ pipeline {
         pollSCM '*/5****'
     }
     stages {
-        stage('Build'){
+        stage('Build') {
             steps {
                 echo 'building...'
                 sh '''
@@ -16,19 +16,19 @@ pipeline {
                 '''
             }
         }
-        stage('Test'){
+        stage('Test') {
             steps {
                 echo 'testing...'
                 sh '''
-                echo 'testing stuff...'
+                echo 'doing test stuff...'
                 '''
             }
         }
-        stage('Deliver'){
+        stage('Deliver') {
             steps {
                 echo 'delivering...'
                 sh '''
-                echo 'delivering stuff...'
+                echo 'doing delivery stuff...'
                 '''
             }
         }
