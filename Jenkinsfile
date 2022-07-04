@@ -34,7 +34,7 @@ pipeline {
         stage('Publish Build') {
             steps {
                 script {
-                    withDockerRegistry('', registryCredential) {
+                    docker.withRegistry('https://registry.example.com', registryCredential) {
                         dockerImg.push()
                     }
                 }
