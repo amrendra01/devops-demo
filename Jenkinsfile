@@ -10,13 +10,13 @@ pipeline {
     
     stages {
         
-        stage('build checkout') {
+        stage('Build Checkout') {
             steps {
                 git branch: 'main',
                 url:'https://github.com/amrendra01/devops-demo.git'
             }
         }
-        stage('build image') {
+        stage('Build') {
             steps {
                 script {
                     img = registry + ":${env.BUILD_ID}"
@@ -24,14 +24,14 @@ pipeline {
                 }
             }
         }
-        stage('test') {
+        stage('Test') {
             steps {
                 sh "docker stop python-ci-cd"
                 sh "docker rm python-ci-cd"
                 sh "docker run -d --name python-ci-cd ${img}"
             }
         }
-        stage('publish') {
+        stage('Publish Build') {
             steps {
                 script {
                     docker.withRegistry('', registryCredential) {
@@ -40,7 +40,7 @@ pipeline {
                 }
             }
         }
-        stage('running in staging') {
+        stage('Deploy Staging') {
             steps {
                 script {
                     echo "running in staging"
