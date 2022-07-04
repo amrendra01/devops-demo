@@ -1,37 +1,50 @@
+def img
 pipeline {
     agent any
-    // agent {
-    //     docker {
-    //         image 'maven:3.8.1-adoptopenjdk-11'
-    //         args '-v $HOME/.m2:/root/.m2'
-    //     }
-    // }
-    triggers {
-        pollSCM '* * * * *'
-    }
+    
+    environment {
+        registry = 'amrendra01/hello-world'
+        registryCredential = 'docker-hub-login'
+        dockerImg = ''
+        }
+    
     stages {
-        stage('Build') {
+        
+        stage('build checkout') {
             steps {
-                echo 'building...'
-                sh '''
-                pip3 install -r requirements.txt
-                '''
+                git branch: 'main',
+                url:'https://github.com/amrendra01/devops-demo.git'
             }
         }
-        stage('Test') {
+        stage('build image') {
             steps {
-                echo 'testing...'
-                sh '''
-                python3 hello.py
-                '''
+                script {
+                    img = registry + ":${env.BUILD_ID}"
+                    dockerImg = docker.build("${img}")
+                }
             }
         }
-        stage('Deliver') {
+        stage('test') {
             steps {
-                echo 'delivering...'
-                sh '''
-                echo 'doing delivery stuff...'
-                '''
+                sh "docker stop python-ci-cd"
+                sh "docker rm python-ci-cd"
+                sh "docker run -d --name python-ci-cd ${img}"
+            }
+        }
+        stage('publish') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImg.push()
+                    }
+                }
+            }
+        }
+        stage('running in staging') {
+            steps {
+                script {
+                    echo "running in staging"
+                }
             }
         }
     }
