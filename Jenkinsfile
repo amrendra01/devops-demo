@@ -3,7 +3,7 @@ pipeline {
     agent any
     
     environment {
-        registry = 'amrendra01/hello-world'
+        registry = 'amrendra01/hello'
         registryCredential = 'docker-hub-login'
         dockerImg = ''
         }
