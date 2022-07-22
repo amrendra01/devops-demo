@@ -16,19 +16,12 @@ pipeline {
                 url:'https://github.com/amrendra01/devops-demo.git'
             }
         }
-        stage('Build') {
+        stage('Build Artifact') {
             steps {
                 script {
                     img = registry + ":${env.BUILD_ID}"
                     dockerImg = docker.build("${img}")
                 }
-            }
-        }
-        stage('Test') {
-            steps {
-                sh "docker stop python-ci-cd"
-                sh "docker rm python-ci-cd"
-                sh "docker run -d --name python-ci-cd ${img}"
             }
         }
         stage('Publish Build') {
@@ -42,9 +35,9 @@ pipeline {
         }
         stage('Deploy Staging') {
             steps {
-                script {
-                    echo "running in staging"
-                }
+                sh "docker stop python-ci-cd"
+                sh "docker rm python-ci-cd"
+                sh "docker run -d --name python-ci-cd ${img}"
             }
         }
     }
