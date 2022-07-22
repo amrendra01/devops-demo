@@ -1,11 +1,11 @@
 FROM python:3.9-slim-buster
 
-WORKDIR /mycode
+WORKDIR /code
 
-COPY . /mycode
+COPY . .
 
 RUN pip install --upgrade pip && \ 
-    pip install -r /mycode/requirements.txt
+    pip install -r /code/requirements.txt
 
 ENTRYPOINT [ "python" ]
-CMD ["/mycode/hello.py"]
+CMD ["/code/hello.py"]
